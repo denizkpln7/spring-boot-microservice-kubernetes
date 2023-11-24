@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: department-service-app
+spec:
+  selector:
+    matchLabels:
+      app: department-service-app
+  template:
+    metadata:
+      labels:
+        app: department-service-app
+    spec:
+      containers:
+      - name: department-service-app
+        image: denizkpln/dk-department-service
+        ports:
+        - containerPort: 8002
+        env:
+        - name: EUREKA_SERVER_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              name: eureka-cm
+              key: eureka_service_address
+        - name: CONFIG_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: config-cm
+              key: config-server          
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: postgre-cv
+              key: db_host
+        - name: DB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: postgre-cv
+              key: database
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: sc-postgre
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sc-postgre
+              key: password
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: department-service-svc
+spec:
+  selector:
+    app: department-service-app
+  ports:
+  - port: 80
+    targetPort: 8002
+        

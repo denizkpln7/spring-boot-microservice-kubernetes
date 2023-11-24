@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eureka-cm
+data:
+  eureka_service_address: "http://service-registry-svc/eureka"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-cm
+data:
+  config-server: "http://config-server-svc"
+
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-cv
+data:
+  port: "8001"
+  db_host: "mysql8:3306"
+  database: employee
+
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgre-cv
+data:
+  port: "8002"
+  db_host: "postgres14:5432"
+  database: department
+
